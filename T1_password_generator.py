@@ -1,4 +1,5 @@
 import random
+from io import open
 
 def password_generation():
 
@@ -71,23 +72,46 @@ while get_process != '3':
     print("3. Exit")
 
     get_process = input("\n Enter the number of the process you want to perform: ")
+    concatenar = ""
 
     if get_process == '1':
         account = input("\n Enter the name of the account for which the password will be generated: ")
         password_memory[ account ] = password_generation()
         print("\n", account, ":", password_memory[account])
+        file = open ('archivo.txt', 'a') #open file
+        concatenar = account + ":" + password_memory[account] + ","
+        file.write(concatenar) #Write file
+        file.close() #close file
+       
 
     elif get_process == '2':
+        storage_account={}
         account = input("\n Enter the name of the account you want to get the password for: ")
-        if account in password_memory:
-            print("\n", account, ":", password_memory[account])
+        file=open('archivo.txt', 'r') 
+        concatenado = (file.read())
+        file.close()
+        #print(concatenado)
+        string = concatenado.split(",")
+        #print(string)
+        string.pop(len(string)-1)
+        #print(string)
+
+
+        for item in range(len(string)):
+            separacion = string[item].split(":")
+            print(separacion)
+            #storage_account[item] = {separacion[0] : separacion[1]}
+            storage_account.update({separacion[0] : separacion[1]}) 
+        print(storage_account)
+
+        if account in storage_account:
+            print("\n", account, ":", storage_account[account])
         else:
             print("\n The account entered does not exist")
+
 
     elif get_process == '3':
         pass
 
     else:
         print("\n The number entered is not valid, please enter a valid number")
-
-
